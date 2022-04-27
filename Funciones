@@ -44,3 +44,24 @@ END $$
 DELIMITER ;
 
 select dias_activos_de_rider (71281);
+
+DELIMITER $$
+
+CREATE FUNCTION ordenes_x_rider (par_rider INT)
+RETURNS INT
+READS SQL DATA
+
+BEGIN 
+DECLARE conteo_ordenes INT ;
+
+SET conteo_ordenes= (SELECT COUNT(order_id)
+                  FROM ordenes
+                  WHERE rider_id = par_rider);
+
+RETURN conteo_ordenes;
+
+END $$
+
+DELIMITER ;
+
+Select ordenes_x_rider (72516);
