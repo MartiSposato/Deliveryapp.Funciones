@@ -1,0 +1,25 @@
+DELIMITER $$
+
+CREATE FUNCTION `dias_activos_de_rider` (rider_id INT)
+RETURNS INT
+READS SQL DATA
+BEGIN
+
+DECLARE dias_activo INT;
+DECLARE fecha_de_inicio DATE;
+
+SET fecha_de_inicio = (SELECT Fecha_de_inicio from riders
+where riders.rider_id = rider_id
+order by riders.fecha_de_inicio
+LIMIT 1);
+
+SET dias_activo = (SELECT DATEDIFF(CURDATE(), @Fecha_de_inicio) FROM DUAL); 
+
+RETURN dias_activo;
+
+END $$
+
+DELIMITER ;
+
+Select dias_activos_de_rider(375770) as dias;
+
