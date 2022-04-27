@@ -1,19 +1,41 @@
+
 DELIMITER $$
 
-CREATE FUNCTION `dias_activos_de_rider` (rider_id INT)
+CREATE FUNCTION `convertir_nombre_ciudad_en_city_id` (par_ciudad Varchar(50))
 RETURNS INT
+READS SQL DATA
+
+BEGIN
+
+DECLARE id_city INT;
+SET id_city =   (SELECT city_id from cities
+                 where ciudad = par_ciudad);
+				
+RETURN id_city;
+
+END $$
+
+DELIMITER ;
+
+Select convertir_nombre_ciudad_en_city_id('mendoza');
+
+
+DELIMITER $$
+
+CREATE FUNCTION `dias_activos_de_rider`(par_rider_id INT) 
+RETURNS int
 READS SQL DATA
 BEGIN
 
 DECLARE dias_activo INT;
-DECLARE fecha_de_inicio DATE;
+DECLARE inicio DATE;
 
-SET fecha_de_inicio = (SELECT Fecha_de_inicio from riders
-where riders.rider_id = rider_id
+SET inicio = (SELECT Fecha_de_inicio from riders
+where riders.rider_id = par_rider_id
 order by riders.fecha_de_inicio
 LIMIT 1);
 
-SET dias_activo = (SELECT DATEDIFF(CURDATE(), @Fecha_de_inicio) FROM DUAL); 
+SET dias_activo = (SELECT DATEDIFF(CURDATE(), inicio) FROM DUAL); 
 
 RETURN dias_activo;
 
@@ -21,27 +43,4 @@ END $$
 
 DELIMITER ;
 
-
-DELIMITER $$
-
-CREATE FUNCTION `convertir_nombre_ciudad_en_city_id` (ciudad Varchar(50))
-RETURNS INT
-READS SQL DATA
-BEGIN
-
-DECLARE nombre_ciudad Varchar(50); 
-DECLARE city_id INT;
-
-SET nombre_ciudad = (Select ciudad from riders
-LIMIT 1);
-                    
-SET city_id =   (SELECT city_id from riders
-					inner join cities on riders.ciudad = cities.ciudad
-                    order by riders.ciudad
-                    LIMIT 1);                 
-
-RETURN city_id;
-
-END $$
-
-DELIMITER ;
+select dias_activos_de_rider (71281);
