@@ -21,5 +21,27 @@ END $$
 
 DELIMITER ;
 
-Select dias_activos_de_rider(375770) as dias;
 
+DELIMITER $$
+
+CREATE FUNCTION `convertir_nombre_ciudad_en_city_id` (ciudad Varchar(50))
+RETURNS INT
+READS SQL DATA
+BEGIN
+
+DECLARE nombre_ciudad Varchar(50); 
+DECLARE city_id INT;
+
+SET nombre_ciudad = (Select ciudad from riders
+LIMIT 1);
+                    
+SET city_id =   (SELECT city_id from riders
+					inner join cities on riders.ciudad = cities.ciudad
+                    order by riders.ciudad
+                    LIMIT 1);                 
+
+RETURN city_id;
+
+END $$
+
+DELIMITER ;
