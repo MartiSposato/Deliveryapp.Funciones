@@ -47,7 +47,7 @@ select dias_activos_de_rider (71281);
 
 DELIMITER $$
 
-CREATE FUNCTION ordenes_x_rider (par_rider INT)
+CREATE FUNCTION `ordenes_x_rider` (par_rider INT)
 RETURNS INT
 READS SQL DATA
 
@@ -64,4 +64,4 @@ END $$
 
 DELIMITER ;
 
-Select ordenes_x_rider (72516);
+Select `ordenes_x_rider` (72516);
